@@ -95,8 +95,10 @@ export default function Home() {
             }}
           >
             <TextField
-              id="standard-basic"
+              id="outlined-password-input"
               label="********"
+              type="password"
+              autoComplete="current-password"
               variant="outlined"
               style={{ position: "absolute", width: "100%", height: "100%" }}
             ></TextField>
