@@ -153,7 +153,7 @@ export default function Home() {
             <div style={{ display: "flex", marginBottom: "1rem" }}>
               <Button
                 variant="contained"
-                style={{ backgroundColor: "#1B1A55", flex: "1" }}
+                style={{ backgroundColor: "#378CE7", flex: "1" }}
               >
                 Login
               </Button>
@@ -172,8 +172,8 @@ export default function Home() {
           <div style={{ display: "flex", marginTop: "2rem" }}>
             <Button
               variant="contained"
-              style={{
-                backgroundColor: "#ffff",
+              sx={{
+                backgroundColor: "white",
                 color: "black",
                 flex: "1",
                 fontSize: "0.7rem",
