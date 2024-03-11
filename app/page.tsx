@@ -100,7 +100,7 @@ export default function Home() {
               type="password"
               autoComplete="current-password"
               variant="outlined"
-              style={{ position: "absolute", width: "100%", height: "100%" }}
+              sx={{ position: "absolute", width: "100%", height: "100%" }}
             ></TextField>
             <Link
               noWrap
