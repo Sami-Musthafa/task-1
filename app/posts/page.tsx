@@ -2,6 +2,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import router, { useRouter } from "next/router";
 import {
   Table,
   TableBody,
@@ -13,6 +14,7 @@ import {
   TablePagination,
   Typography,
 } from "@mui/material";
+import next from "next";
 
 interface Post {
   userId: number;
@@ -21,7 +23,7 @@ interface Post {
   body: string;
 }
 
-const Postss = () => {
+const Posts = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -118,4 +120,4 @@ const Postss = () => {
   );
 };
 
-export default Postss;
+export default Posts;

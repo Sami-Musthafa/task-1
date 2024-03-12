@@ -6,7 +6,7 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
-  background-image: url("../public/3409297.jpg");
+  background-color: #378ce7;
 }
 
 @media (prefers-color-scheme: dark) {
