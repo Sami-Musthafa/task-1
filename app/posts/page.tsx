@@ -1,4 +1,3 @@
-// pages/index.tsx
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -15,8 +14,9 @@ import {
   Typography,
 } from "@mui/material";
 import next from "next";
+import Link from "next/link";
 
-interface Post {
+export interface Post {
   userId: number;
   id: number;
   title: string;
@@ -91,13 +91,22 @@ const Posts = () => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((post) => (
                 <TableRow key={post.id}>
-                  <TableCell>{post.userId}</TableCell>
-                  <TableCell>{post.id}</TableCell>
                   <TableCell>
-                    {post.title.charAt(0).toUpperCase() + post.title.slice(1)}
+                    {" "}
+                    <Link href={`./posts/${post.id}`}>{post.userId}</Link>
                   </TableCell>
                   <TableCell>
-                    {post.body.charAt(0).toUpperCase() + post.body.slice(1)}
+                    <Link href={`./posts/${post.id}`}>{post.id}</Link>
+                  </TableCell>
+                  <TableCell>
+                    <Link href={`./posts/${post.id}`}>
+                      {post.title.charAt(0).toUpperCase() + post.title.slice(1)}
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    <Link href={`/posts/${post.id}`}>
+                      {post.body.charAt(0).toUpperCase() + post.body.slice(1)}
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}

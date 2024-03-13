@@ -1,23 +1,75 @@
-"use client";
+// "use client";
 
-import React, { useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
+// import React, { useEffect, useState } from "react";
+// import { useRouter, useParams } from "next/navigation";
+// import axios from "axios";
+// import Link from "next/link";
 
-type Props = {};
+// type Post = {
+//   userId: number;
+//   id: number;
+//   title: string;
+//   body: string;
+// };
 
-const PostId = (props: Props) => {
-  const router = useRouter();
-  // console.log(router);
-  const params = useParams();
-  console.log(params);
+// const styles = {
+//   post: {
+//     background: "#378CE7",
+//     color: "white",
+//     width: "100%",
+//     height: "87vh",
+//     display: "flex",
+//     flexDirection: "column",
+//     alignItems: "start",
+//     justifyContent: "center",
+//     padding: "10rem",
+//   },
+//   button: {
+//     padding: "1rem",
+//     margin: "1rem",
+//     borderRadius: "15px",
+//     boxShadow: "#f95959",
+//     color: "white",
+//     backgroundColor: "#f95959",
+//   },
+// };
 
-  useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/posts")
-      .then((res) => res.json())
-      .then((data) => console.log(data));
-  }, []);
+// type Props = {};
 
-  return <div>PostId</div>;
-};
+// const PostId = (props: Props) => {
+//   const [posts, setPosts] = useState<Post[]>([]);
+//   const router = useRouter();
 
-export default PostId;
+//   const params = useParams();
+
+//   const [pageId, setPageId] = useState(1);
+
+//   useEffect(() => {
+//     const fetchPosts = async () => {
+//       try {
+//         const response = await axios.get(
+//           `https://jsonplaceholder.typicode.com/posts/${params.Id}`
+//         );
+//         setPosts(response.data);
+//       } catch (error) {
+//         console.error("Error fetching data:", error);
+//       }
+//     };
+//     fetchPosts();
+//   }, []);
+
+//   return (
+//     <div>
+//       <Link href={"../posts"}>
+//         <button style={styles.button}>&lt;</button>
+//       </Link>
+//       <div style={styles.post}>
+//         <div>Id: {posts.id}</div>
+//         <div>Title: {posts.title}</div>
+//         <div>Body: {posts.body}</div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default PostId;
