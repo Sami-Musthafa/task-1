@@ -1,7 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import router, { useRouter } from "next/router";
+import router, { useRouter } from "next/navigation";
 import {
   Table,
   TableBody,
@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import next from "next";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export interface Post {
   userId: number;
@@ -22,108 +23,208 @@ export interface Post {
   title: string;
   body: string;
 }
+const styles = {
+  post: {
+    background: "red",
+    margin: 20,
+  },
+};
 
 const Posts = () => {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await axios.get(
-          "https://jsonplaceholder.typicode.com/posts"
-        );
-        setPosts(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-    fetchPosts();
+  const itemsPerPage = 5;
+
+  const fetchPosts = useCallback(async (currentPage: number) => {
+    setIsLoading(true);
+    try {
+      const start = itemsPerPage * (currentPage - 1);
+      const postsReq = await fetch(
+        `https://jsonplaceholder.typicode.com/posts?_start=${start}&_limit=${itemsPerPage}`
+      );
+      const res: Post[] = await postsReq.json();
+      setPosts(res);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
   }, []);
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
+  const handlePage = (pageNumber: number) => {
+    const currentPage = page + pageNumber;
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", currentPage.toString());
+    router.push(`/posts?${params.toString()}`);
   };
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+  useEffect(() => {
+    const currentPage = searchParams.get("page") ?? page;
+    setPage(Number(currentPage));
+    fetchPosts(Number(currentPage));
+  }, [searchParams, page, fetchPosts]);
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Typography
-        variant="h5"
-        sx={{
-          fontFamily: "Monospace",
-          fontStyle: "italic",
-          color: "white",
-          fontWeight: "900",
-          padding: "0.5rem",
+    <div>
+      <div
+        style={{
+          height: "90vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        Posts
-      </Typography>
-      <TableContainer component={Paper} sx={{ width: "90%" }}>
-        <Table sx={{ minWidth: 650 }} stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">User Id</TableCell>
-              <TableCell align="center">ID</TableCell>
-              <TableCell align="center">Title</TableCell>
-              <TableCell align="center">Body</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {posts
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((post) => (
-                <TableRow key={post.id}>
-                  <TableCell>
-                    {" "}
-                    <Link href={`./posts/${post.id}`}>{post.userId}</Link>
-                  </TableCell>
-                  <TableCell>
-                    <Link href={`./posts/${post.id}`}>{post.id}</Link>
-                  </TableCell>
-                  <TableCell>
-                    <Link href={`./posts/${post.id}`}>
-                      {post.title.charAt(0).toUpperCase() + post.title.slice(1)}
-                    </Link>
-                  </TableCell>
-                  <TableCell>
-                    <Link href={`./posts/${post.id}`}>
-                      {post.body.charAt(0).toUpperCase() + post.body.slice(1)}
-                    </Link>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+        <Typography
+          variant="h5"
+          sx={{
+            fontFamily: "Monospace",
+            fontStyle: "italic",
+            color: "white",
+            fontWeight: "900",
+            padding: "0.5rem",
+          }}
+        >
+          Posts
+        </Typography>
+
+        <Suspense>
+          <div>
+            {isLoading && (
+              <div
+                style={{
+                  height: "100vh",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "white",
+                }}
+              >
+                Loading...
+              </div>
+            )}
+            {!isLoading && posts.length > 0 && (
+              <div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <TableContainer
+                    component={Paper}
+                    sx={{
+                      width: "90%",
+                    }}
+                  >
+                    <Table
+                      sx={{ minWidth: 650 }}
+                      stickyHeader
+                      aria-label="sticky table"
+                    >
+                      <TableHead>
+                        <TableRow>
+                          <TableCell align="center">User Id</TableCell>
+                          <TableCell align="center">ID</TableCell>
+                          <TableCell align="center">Title</TableCell>
+                          <TableCell align="center">Body</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {posts.map((post: Post) => (
+                          <TableRow
+                            key={post.id}
+                            component={Link}
+                            href={`./posts/${post.id}`}
+                          >
+                            <TableCell> {post.userId}</TableCell>
+                            <TableCell>{post.id}</TableCell>
+                            <TableCell>
+                              {post.title.charAt(0).toUpperCase() +
+                                post.title.slice(1)}
+                            </TableCell>
+                            <TableCell>
+                              {post.body.charAt(0).toUpperCase() +
+                                post.body.slice(1)}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                    marginBottom: 24,
+                  }}
+                ></div>
+              </div>
+            )}
+            {!isLoading && posts.length === 0 && (
+              <div
+                style={{
+                  height: "100vh",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "white",
+                }}
+              >
+                No Posts
+              </div>
+            )}
+          </div>
+        </Suspense>
+      </div>
       <div>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={posts.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          style={{ color: "white" }}
-        />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-around",
+            alignItems: "center",
+            color: "white",
+          }}
+        >
+          <div>
+            <button
+              style={{
+                width: "60px",
+                backgroundColor: "#f95959",
+                height: "40px",
+                borderRadius: "20px",
+              }}
+              disabled={page === 1}
+              onClick={() => handlePage(-1)}
+            >
+              Prev
+            </button>
+          </div>
+          <div>
+            Page: {page} ({(page - 1) * itemsPerPage + 1} to{" "}
+            {page * itemsPerPage})
+          </div>
+          <div>
+            <button
+              style={{
+                width: "60px",
+                backgroundColor: "#f95959",
+                height: "40px",
+                borderRadius: "20px",
+              }}
+              onClick={() => handlePage(1)}
+            >
+              Next
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

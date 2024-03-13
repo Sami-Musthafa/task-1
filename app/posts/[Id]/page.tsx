@@ -4,16 +4,15 @@ import React, { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import axios from "axios";
 import Link from "next/link";
-import { Post } from "../page";
 
-// type Post = {
-//   userId: number;
-//   id: number;
-//   title: string;
-//   body: string;
-// };
+type Post = {
+  userId: number;
+  id: number;
+  title: string;
+  body: string;
+};
 
-const styles = {
+const styles: any = {
   post: {
     background: "#378CE7",
     color: "white",
@@ -37,10 +36,14 @@ const styles = {
 
 type Props = {};
 
-const PostId = (props: Props) => {
-  const [posts, setPosts] = useState<Post[]>([]);
+const PostPage = (props: Props) => {
+  const [post, setPost] = useState<Post>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
+
   const params = useParams();
+
+  const [pageId, setPageId] = useState(1);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -49,7 +52,7 @@ const PostId = (props: Props) => {
         const response = await axios.get(
           `https://jsonplaceholder.typicode.com/posts/${params.Id}`
         );
-        setPosts(response.data);
+        setPost(response.data);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -79,9 +82,9 @@ const PostId = (props: Props) => {
             <button style={styles.button}>&lt;</button>
           </Link>
           <div style={styles.post}>
-            <div>Id: {posts.id}</div>
-            <div>Title: {posts.title}</div>
-            <div>Body: {posts.body}</div>
+            <div>Id: {post?.id}</div>
+            <div>Title: {post?.title}</div>
+            <div>Body: {post?.body}</div>
           </div>
         </div>
       )}
@@ -89,4 +92,4 @@ const PostId = (props: Props) => {
   );
 };
 
-export default PostId;
+export default PostPage;

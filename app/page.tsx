@@ -40,7 +40,6 @@ export default function Home() {
             flexDirection: "column",
             alignItems: "center",
             top: "8rem",
-            left: "-4rem",
           }}
         >
           <div>
