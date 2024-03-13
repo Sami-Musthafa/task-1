@@ -40,11 +40,7 @@ type Props = {};
 const PostId = (props: Props) => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const router = useRouter();
-
   const params = useParams();
-
-  const [pageId, setPageId] = useState(1);
 
   useEffect(() => {
     const fetchPosts = async () => {

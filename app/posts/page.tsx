@@ -5,13 +5,13 @@ import router, { useRouter } from "next/router";
 import {
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableHead,
   TableRow,
   Paper,
   TablePagination,
   Typography,
+  TableCell,
 } from "@mui/material";
 import next from "next";
 import Link from "next/link";
@@ -104,7 +104,7 @@ const Posts = () => {
                     </Link>
                   </TableCell>
                   <TableCell>
-                    <Link href={`/posts/${post.id}`}>
+                    <Link href={`./posts/${post.id}`}>
                       {post.body.charAt(0).toUpperCase() + post.body.slice(1)}
                     </Link>
                   </TableCell>
