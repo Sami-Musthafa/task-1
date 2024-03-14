@@ -78,9 +78,10 @@ const PostPage = (props: Props) => {
         </div>
       ) : (
         <div>
-          <Link href={"/posts"}>
-            <button style={styles.button}>&lt;</button>
-          </Link>
+          <button style={styles.button} onClick={() => router.back()}>
+            &lt;
+          </button>
+
           <div style={styles.post}>
             <div>Id: {post?.id}</div>
             <div>Title: {post?.title}</div>

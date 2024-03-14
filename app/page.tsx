@@ -195,6 +195,23 @@ export default function Home() {
               </div>
             </Button>
           </div>
+          <div
+            style={{
+              textAlign: "center",
+              width: "100%",
+              margin: "1rem 0",
+              padding: "1rem",
+              borderRadius: "10px",
+              backgroundColor: "#378CE7",
+            }}
+          >
+            <Link
+              style={{ textDecoration: "none", color: "white" }}
+              href={"./login"}
+            >
+              Visit our culty page
+            </Link>
+          </div>
         </div>
       </Grid>
     </Grid>
