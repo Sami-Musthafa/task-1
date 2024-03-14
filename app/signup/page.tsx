@@ -168,7 +168,7 @@ const form = () => {
                   color: "white",
                 }}
               >
-                Login
+                Sign Up
               </button>
             </div>
           </form>
