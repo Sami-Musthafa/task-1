@@ -1,8 +1,13 @@
 "use client";
-
 import Link from "next/link";
 import React from "react";
+import { z } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
+
+const schema = z.object({
+  email: z.string().min(3),
+  password: z.string().min(6).max(12),
+});
 
 type FormInputs = {
   email: string;
@@ -117,6 +122,23 @@ const form = () => {
               </button>
             </div>
           </form>
+          <div
+            style={{
+              textAlign: "center",
+              width: "100%",
+              margin: "1rem 0",
+              padding: "2%",
+              borderRadius: "10px",
+              backgroundColor: "#378CE7",
+            }}
+          >
+            <Link
+              style={{ textDecoration: "none", color: "white" }}
+              href={"../modal"}
+            >
+              Visit Popup page
+            </Link>
+          </div>
         </div>
       </div>
     </div>

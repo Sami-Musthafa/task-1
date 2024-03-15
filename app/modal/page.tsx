@@ -1,272 +1,220 @@
+// "use client";
+// import * as React from "react";
+// import Button from "@mui/material/Button";
+// import Dialog from "@mui/material/Dialog";
+// import DialogActions from "@mui/material/DialogActions";
+// import DialogContent from "@mui/material/DialogContent";
+// import DialogContentText from "@mui/material/DialogContentText";
+// import DialogTitle from "@mui/material/DialogTitle";
+// import useMediaQuery from "@mui/material/useMediaQuery";
+// import { useTheme } from "@mui/material/styles";
+// import styles from "./modal.module.css";
+// import Link from "next/link";
+// import { z } from "zod";
+// import { SubmitHandler, useForm } from "react-hook-form";
+// import { useState } from "react";
+// import { zodResolver } from "@hookform/resolvers/zod";
+// import LoginModal from "../components/LoginModal";
+// import SignupModal from "../components/SignupModal";
+
+// type Props = {};
+
+// type FormInputs = {
+//   email: string;
+//   password: string;
+//   firstName: string;
+//   lastName: string;
+// };
+
+// const schema = z.object({
+//   email: z.string().email({ message: "Invalid email format" }),
+//   password: z
+//     .string()
+//     .min(6, { message: "Password must be at least 6 characters long" }),
+//   firstName: z.string().min(2, { message: "Invalid First Name" }),
+//   laststName: z.string().min(2, { message: "Invalid Last Name" }),
+// });
+
+// export default function ResponsiveDialog() {
+//   const {
+//     register,
+//     handleSubmit,
+//     formState: { errors },
+//   } = useForm<FormInputs>({ resolver: zodResolver(schema) });
+
+//   const [openLogin, setOpenLogin] = useState(false);
+//   const [openSignup, setOpenSignup] = useState(false);
+//   const theme = useTheme();
+//   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+
+//   // const handleLoginOpen = () => setOpenLogin(true);
+//   // const handleLoginClose = () => setOpenLogin(false);
+//   const toggleLogin = () => setOpenLogin(!openLogin);
+//   const toggleSignup = () => setOpenSignup(!openSignup);
+//   const handleSignupOpen = () => setOpenSignup(true);
+//   const handleSignupClose = () => setOpenSignup(false);
+
+//   const onSubmit: SubmitHandler<FormInputs> = (data) => console.log(data);
+
+//   return (
+//     <div
+//       style={{
+//         display: "flex",
+//         justifyContent: "space-around",
+//         alignItems: "center",
+//         paddingTop: "3rem",
+//       }}
+//     >
+//       <div className={styles.btnBoth}>
+//         <React.Fragment>
+//           <Button
+//             id="loginSection"
+//             variant="outlined"
+//             sx={{ color: "white" }}
+//             onClick={toggleLogin}
+//           >
+//             Login
+//           </Button>
+//           <LoginModal open={openLogin} onClose={toggleLogin} />
+//         </React.Fragment>
+//       </div>
+//       <div className={styles.btnBoth}>
+//         <React.Fragment>
+//           <Button
+//             id="signupSection"
+//             sx={{ color: "white" }}
+//             variant="outlined"
+//             onClick={toggleSignup}
+//           >
+//             Sign Up
+//           </Button>
+//           <SignupModal open={openSignup} onClose={toggleSignup} />
+//         </React.Fragment>
+//       </div>
+//     </div>
+//   );
+// }
+
 "use client";
-import * as React from "react";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
-import styles from "./modal.module.css";
-import Link from "next/link";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { useState } from "react";
-import SignupDialog from "./signup";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+//import styles from './page.module.css';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  Tabs,
+  Tab,
+} from "@mui/material";
+import LoginPage from "../components/LoginModal";
+import SignupPage from "../components/SignupModal";
 
-type FormInputs = {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-};
+const signupSchema = z
+  .object({
+    firstName: z.string().min(3, "First Name is required").max(15),
+    lastName: z.string().min(3, "Last Name is required").max(15),
+    email: z.string().email("Email must be a valid"),
+    password: z.string().min(6, "Password should be atleast 6 chars").max(12),
+  })
+  .required();
+const loginSchema = z
+  .object({
+    email: z.string().email("Email must be a valid email address"),
+    password: z.string().min(8, "password should be atleast 8 chars").max(12),
+  })
+  .required();
+type Props = {};
+const Home = (props: Props) => {
+  const [open, setOpen] = useState(false);
+  const [tabValue, setTabValue] = React.useState(0);
 
-const schema = z.object({
-  email: z.string().email({ message: "Invalid email format" }),
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters long" }),
-});
+  const toggleDialog = () => {
+    setOpen(!open);
+  };
 
-export default function ResponsiveDialog() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormInputs>();
-
-  const [openLogin, setOpenLogin] = useState(false);
-  const [openSignup, setOpenSignup] = useState<boolean>(false);
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
-
-  const handleLoginOpen = () => setOpenLogin(true);
-  const handleLoginClose = () => setOpenLogin(false);
-
-  const handleSignupOpen = () => setOpenSignup(true);
-  const handleSignupClose = () => setOpenSignup(false);
-
-  const onSubmit: SubmitHandler<FormInputs> = (data) => console.log(data);
-
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setTabValue(newValue);
+  };
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-around",
-        alignItems: "center",
-        paddingTop: "3rem",
-      }}
-    >
-      <div className={styles.btnBoth}>
-        <React.Fragment>
-          <Button
-            id="loginSection"
-            variant="outlined"
-            sx={{ color: "white" }}
-            onClick={handleLoginOpen}
+    <Box>
+      <Box
+        sx={{
+          width: "100vw",
+          height: "100vh",
+          display: "grid",
+          placeItems: "center",
+        }}
+      >
+        <Button
+          variant="contained"
+          onClick={toggleDialog}
+          sx={{ fontWeight: "200" }}
+        >
+          Join Culty
+        </Button>
+      </Box>
+
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-around"
+        sx={{ mb: 2 }}
+      >
+        <Dialog open={open} fullWidth onClose={toggleDialog}>
+          <DialogTitle
+            sx={{
+              textAlign: "center",
+              color: "rgb(18, 64, 118)",
+              fontSize: "2.5rem",
+              fontWeight: "700",
+              fontFamily: "sans-serif",
+            }}
           >
-            Login
-          </Button>
-          <Dialog
-            fullScreen={fullScreen}
-            open={openLogin}
-            onClose={handleLoginClose}
-            aria-labelledby="responsive-dialog-title"
+            <i>Culty</i>
+          </DialogTitle>
+          <DialogContent
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            <div className={styles.home}>
-              <DialogTitle
-                id="responsive-dialog-title"
-                sx={{ fontWeight: "600" }}
+            <Box
+              sx={{
+                flex: "1",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Tabs
+                value={tabValue}
+                onChange={handleTabChange}
+                sx={{
+                  flex: "1",
+                  width: "90%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
               >
-                {"Sign in to Culty"}
-              </DialogTitle>
-              <DialogContentText
-                style={{ paddingLeft: "10%", fontWeight: "300" }}
-              >
-                New user?
-                <Link
-                  href={""}
-                  onClick={handleLoginOpen}
-                  style={{
-                    fontWeight: "600",
-                    color: "#124076",
-                  }}
-                >
-                  Create new account
-                </Link>
-              </DialogContentText>
-              <DialogContent>
-                <div>
-                  <form
-                    action="submit"
-                    className={styles.loginForm}
-                    onSubmit={handleSubmit(onSubmit)}
-                  >
-                    <input
-                      type="email"
-                      placeholder="Email address"
-                      className={styles.emailInput}
-                      {...register("email", { required: "Email is required" })}
-                    />
-                    {errors.email && (
-                      <p style={{ color: "#FE0000" }}>
-                        {" "}
-                        {errors.email?.message}
-                      </p>
-                    )}
-                    <input
-                      type="password"
-                      placeholder="Password"
-                      className={styles.passInput}
-                      {...register("password", {
-                        required: "Password is required",
-                        minLength: {
-                          value: 6,
-                          message: "Minimum 6 characters required",
-                        },
-                      })}
-                    />
-                    {errors.password && (
-                      <p style={{ color: "#FE0000" }}>
-                        {" "}
-                        {errors.password?.message}
-                      </p>
-                    )}
-                    <a className={styles.forgotPass} href="#">
-                      Forgot password?
-                    </a>
-                    <button className={styles.loginButton}>Login</button>
-                  </form>
-                </div>
-              </DialogContent>
-              <DialogActions sx={{ display: "flex", justifyContent: "center" }}>
-                <Button autoFocus onClick={handleLoginClose}>
-                  <button className={styles.cancelButton}>Close</button>
-                </Button>
-              </DialogActions>
-            </div>
-          </Dialog>
-        </React.Fragment>
-      </div>
-      <div className={styles.btnBoth}>
-        <React.Fragment>
-          <Button
-            id="signupSection"
-            sx={{ color: "white" }}
-            variant="outlined"
-            onClick={handleSignupOpen}
-          >
-            Sign Up
-          </Button>
-          <Dialog
-            fullScreen={fullScreen}
-            open={openSignup}
-            onClose={handleSignupClose}
-            aria-labelledby="responsive-dialog-title"
-          >
-            <div className={styles.home}>
-              <DialogTitle
-                id="responsive-dialog-title"
-                sx={{ fontWeight: "600" }}
-              >
-                {"Get started absolutely free"}
-              </DialogTitle>
-              <DialogContentText
-                style={{ paddingLeft: "10%", fontWeight: "300" }}
-              >
-                Already have account?
-                <Link
-                  style={{
-                    fontWeight: "600",
-                    color: "#124076",
-                  }}
-                  href="#"
-                >
-                  Sign in
-                </Link>
-              </DialogContentText>
-              <DialogContent>
-                <div>
-                  <form
-                    action="submit"
-                    onSubmit={handleSubmit(onSubmit)}
-                    className={styles.loginForm}
-                  >
-                    <input
-                      type="firstName"
-                      placeholder="First Name"
-                      className={styles.firstname}
-                      {...register("firstName", {
-                        required: "First Name is required",
-                      })}
-                    />
-                    {errors.firstName && (
-                      <p style={{ color: "#FE0000" }}>
-                        {" "}
-                        {errors.firstName?.message}
-                      </p>
-                    )}
-                    <input
-                      type="lastName"
-                      placeholder="Last Name"
-                      className={styles.lastname}
-                      {...register("lastName", {
-                        required: "Last Name is required",
-                      })}
-                    />
-                    {errors.lastName && (
-                      <p style={{ color: "#FE0000" }}>
-                        {" "}
-                        {errors.lastName?.message}
-                      </p>
-                    )}
-                    <input
-                      type="email"
-                      placeholder="Email address"
-                      className={styles.emailInput}
-                      {...register("email", { required: "Email is required" })}
-                    />
-                    {errors.email && (
-                      <p style={{ color: "#FE0000" }}>
-                        {" "}
-                        {errors.email?.message}
-                      </p>
-                    )}
-                    <input
-                      type="password"
-                      placeholder="Password"
-                      className={styles.passInput}
-                      {...register("password", {
-                        required: "Password is required",
-                        minLength: {
-                          value: 6,
-                          message: "Minimum 6 characters required",
-                        },
-                      })}
-                    />
-                    {errors.password && (
-                      <p style={{ color: "#FE0000" }}>
-                        {" "}
-                        {errors.password?.message}
-                      </p>
-                    )}
-                    <a className={styles.forgotPass} href="#">
-                      Forgot password?
-                    </a>
-                    <button className={styles.loginButton}>Sign up</button>
-                  </form>
-                </div>
-              </DialogContent>
-              <DialogActions sx={{ display: "flex", justifyContent: "center" }}>
-                <Button autoFocus onClick={handleSignupClose}>
-                  <button className={styles.cancelButton}>Close</button>
-                </Button>
-              </DialogActions>
-            </div>
-          </Dialog>
-        </React.Fragment>
-      </div>
-    </div>
+                <Tab label="Login" sx={{ flex: "1" }} />
+                <Tab label="Signup" sx={{ flex: "1" }} />
+              </Tabs>
+              {tabValue === 0 && <LoginPage />}
+              {tabValue === 1 && <SignupPage />}
+            </Box>
+          </DialogContent>
+        </Dialog>
+      </Box>
+    </Box>
   );
-}
+};
+export default Home;

@@ -10,7 +10,6 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
-import { useState } from "react";
 
 export default function Home() {
   return (

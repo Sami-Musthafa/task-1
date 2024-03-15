@@ -21,7 +21,12 @@ const form = () => {
   const onSubmit: SubmitHandler<FormInputs> = (data) => console.log(data);
 
   return (
-    <div style={{ backgroundColor: "#FFC374", fontFamily: "sans-serif" }}>
+    <div
+      style={{
+        backgroundColor: "#FFC374",
+        fontFamily: "sans-serif",
+      }}
+    >
       <div className="headingSignup">
         <div>
           SignUp <i>to join our</i> Culty <i>Community</i>
