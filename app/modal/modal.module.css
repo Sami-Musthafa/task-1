@@ -1,0 +1,60 @@
+.home {
+  background-color: #ffc374;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.emailInput {
+  border-radius: 10px;
+  padding: 12px;
+  background-color: white;
+}
+
+.passInput {
+  border-radius: 10px;
+  padding: 12px;
+  background-color: white;
+}
+
+.forgotPass {
+  text-align: right;
+  text-decoration: underline;
+}
+
+.loginButton {
+  background-color: #124076;
+  border-radius: 10px;
+  padding: 10px 100px;
+  font-weight: 600;
+  color: white;
+}
+
+.firstname {
+  border-radius: 10px;
+  padding: 12px;
+  background-color: white;
+}
+
+.lastname {
+  border-radius: 10px;
+  padding: 12px;
+  background-color: white;
+}
+
+.btnBoth {
+  background-color: #f95959;
+  border-radius: 15px;
+}
+
+.cancelButton {
+  background-color: #ff0000;
+  border-radius: 10px;
+  padding: 10px 100px;
+  font-weight: 600;
+  color: white;
+}
